@@ -1,0 +1,163 @@
+.answerSheet {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  user-select: none;
+
+  .title {
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+  }
+
+  .panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(#bbc0c4, 0.7);
+    min-width: 250px;
+    padding: 20px 10px 15px;
+    border-radius: 5px;
+
+    .timer {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__name {
+    font-size: 2rem;
+    font-style: italic;
+  }
+
+  &__wrapper {
+    border: 1px solid #333;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  &__answers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    left: -8px;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__answer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    &.disable {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    &:nth-child(10n) {
+      margin-bottom: 0;
+    }
+
+    .index {
+      margin-right: 5px;
+    }
+
+    .option {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 25px;
+      height: 25px;
+      margin-right: 5px;
+      border: 1px solid #000;
+      border-radius: 50%;
+      font-size: .95rem;
+      cursor: pointer;
+
+      &.select {
+        background-color: #999;
+      }
+
+      &.right {
+        background-color: #29F5A3;
+        border-color: #333;
+        color: #000;
+      }
+
+      &.wrong {
+        color: #fff;
+        background-color: #ff3333;
+        border-color: #b30000;
+      }
+    }
+
+    input[type='radio'] {
+      display: none;
+    }
+  }
+}
+
+
+.sheet-container {
+  display: flex;
+  justify-content: center;
+
+  .wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .title {
+    line-height: .8;
+  }
+
+  .result {
+    margin: 10px;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .link-home {
+    margin-left: auto;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+}
+
+.formTesting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    line-height: 1;
+  }
+
+  .timer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+  }
+
+  .btnControl {
+    position: relative;
+    padding: 0;
+    left: 5px;
+  }
+
+  .btnSubmit {
+    margin-top: 20px;
+  }
+}

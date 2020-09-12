@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
+
+$color-bg: #2b2f3e;
+$color-primary: #93959f;
+$color-primary-hover: #fff;
+
+.main-nav {
+  padding: 10px 40px 6px;
+  margin-bottom: 40px;
+  background-color: $color-bg;
+  color: $color-primary;
+
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  .branch {
+    font-family: 'Patua One', cursive;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+  }
+
+  a,
+  .link {
+    color: $color-primary;
+    transition: color 0.3s ease-out;
+
+    &:hover {
+      color: $color-primary-hover;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .main-nav {
+    .menu {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-left: 60px;
+
+      &__links {
+        display: flex;
+        align-items: center;
+
+        .item {
+          margin-right: 50px;
+        }
+      }
+
+      &__link {
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
+
+    .account {
+      &__info {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        cursor: pointer;
+        color: $color-primary;
+        transition: color 0.3s ease-out;
+
+        &:hover {
+          color: $color-primary-hover;
+        }
+      }
+    }
+  }
+
+  .account {
+    &__menu {
+      .MuiPaper-root {
+        width: 250px;
+        top: 50px;
+        color: #fff;
+        background-color: $color-bg;
+        border: 1px solid #54565f;
+      }
+
+      .MuiList-root {
+        padding: 5px 0;
+      }
+
+      .item {
+        width: 100%;
+        transition: background 0.2s ease-out;
+
+        &:hover {
+          background-color: #ff404b;
+
+          .item__icon,
+          .item__text {
+            color: $color-primary-hover !important;
+          }
+        }
+
+        .item__icon,
+        .item__text {
+          color: $color-primary !important;
+          transition: color 0.2s ease-out !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .main-nav {
+    .row {
+      justify-content: space-between;
+    }
+  }
+
+  .btnMenu {
+    padding: 0 !important;
+  }
+
+  .menu {
+    font-weight: 600;
+
+    &__wrapper {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+    }
+
+    &__panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1;
+      min-width: 320px;
+      width: 40%;
+      height: 100%;
+      background-color: $color-bg;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-out;
+    }
+
+    &__links {
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      border-bottom: 1px solid #54565f;
+
+      .link {
+        display: inline-block;
+        width: 100%;
+        padding: 8px 0 8px 15px;
+        transition: color 0.2s ease-out, background-color 0.2s ease-out;
+
+        &:hover {
+          background-color: #ff404b;
+          color: $color-primary-hover !important;
+        }
+      }
+    }
+
+    &.show {
+      .menu__wrapper {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .menu__panel {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  .account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 1.25rem;
+    border-bottom: 1px solid #54565f;
+  }
+
+  .account-menu {
+    margin-top: 10px;
+
+    .items {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .link {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding-left: 12px;
+      font-weight: 600;
+      cursor: pointer;
+
+      &__icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}

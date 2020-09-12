@@ -1,0 +1,52 @@
+.record-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .title {
+    margin-bottom: 25px;
+  }
+
+  .record {
+    position: relative;
+    padding: 10px;
+    font-size: 1rem;
+    
+    &__title {
+      display: flex;
+      align-items: center;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    &__info {
+      .highlight {
+        font-style: italic;
+        font-size: 1.1rem;
+      }
+    }
+
+    &__test-name {
+      margin-right: 5px;
+    }
+
+    &__result {
+      margin-right: 10px;
+      color: #00cc00;
+    }
+
+    &__part {
+      position: relative;
+      top: -2px;
+      font-size: 0.99rem;
+    }
+
+    &__time {
+      margin-right: 80px;
+    }
+
+    
+  }
+}

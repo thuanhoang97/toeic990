@@ -1,0 +1,32 @@
+.form.auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 550px;
+  margin: 100px auto;
+  background-color: #f2f2f2;
+  box-shadow: -1px 1px 3px 2px #d9d9d9;
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .btnSubmit {
+    margin: 40px 0 30px;
+  }
+  
+  .row {
+    display: flex;
+    width: 100%;
+
+    .col {
+      width: 50%;
+      margin-right: 40px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
