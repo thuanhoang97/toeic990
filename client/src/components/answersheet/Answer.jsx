@@ -9,7 +9,7 @@ const Answer = ({
   rightAnsIdx,
   style,
 }) => {
-  const isEmpty = ansValIdx === -1;
+  const isEmpty = rightAnsIdx !== undefined && ansValIdx === -1;
 
   const handleSelect = (ansValIdx) => {
     onSelect(index, ansValIdx);
@@ -35,7 +35,10 @@ const Answer = ({
 
   return (
     <li className={`answerSheet__answer`} style={style}>
-      <span className="index" style={{ textDecoration: 'line-through' }}>
+      <span
+        className="index"
+        style={{ textDecoration: isEmpty ? 'line-through' : 'none' }}
+      >
         {displayIndex}.
       </span>
       {['A', 'B', 'C', 'D'].map((val, idx) => (
