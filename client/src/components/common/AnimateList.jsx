@@ -11,7 +11,7 @@ const AnimateList = ({
   itemComponent: ItemComponent,
   onClickItem,
   noItemMessage,
-  className
+  className,
 }) => {
   const [isLoading, setLoading] = useState(true);
 
@@ -19,19 +19,30 @@ const AnimateList = ({
     loadItems().then(() => setLoading(false));
   }, [loadItems]);
 
-  const transitions = useTransition(items, (item) => item._id, {
-    from: { transform: 'translate3d(-200px, 0, 0)', opacity: 0 },
-    enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
-    config: { duration: 1000, easing: easings.easeBackInOut },
-    trail: 100,
-  });
+  // const transitions = useTransition(items, (item) => item._id, {
+  //   from: { transform: 'translate3d(-200px, 0, 0)', opacity: 0 },
+  //   enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
+  //   config: { duration: 1000, easing: easings.easeBackInOut },
+  //   trail: 100,
+  //   reset: true,
+  // });
 
   if (isLoading) return <CircularProgress />;
   if (!items.length) return <p className="info">{noItemMessage}</p>;
 
   return (
     <ul className={`animate-list ${className ? className : ''}`}>
-      {transitions.map(({ item, props, key }) => (
+      {items.map((item) => (
+        <li
+          className="animate-list__item item"
+          key={item._id}
+          onClick={() => onClickItem && onClickItem(item)}
+        >
+          <ItemComponent data={item} />
+        </li>
+      ))}
+
+      {/* {transitions.map(({ item, props, key }) => (
         <animated.li
           key={key}
           style={props}
@@ -40,7 +51,7 @@ const AnimateList = ({
         >
           <ItemComponent data={item} />
         </animated.li>
-      ))}
+      ))} */}
     </ul>
   );
 };
