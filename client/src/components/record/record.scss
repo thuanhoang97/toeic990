@@ -13,7 +13,7 @@
     position: relative;
     padding: 10px;
     font-size: 1rem;
-    
+
     &__title {
       display: flex;
       align-items: center;
@@ -46,7 +46,32 @@
     &__time {
       margin-right: 80px;
     }
+  }
+}
 
-    
+.record-filter {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  margin-bottom: 20px;
+
+  .identity {
+    display: flex;
+    align-items: center;
+
+    .label {
+      margin-right: 20px;
+    }
+
+    &--test {
+      .input {
+        min-width: 300px;
+        font-size: 1rem;
+
+        .MuiSelect-root {
+          padding: 8px;
+        }
+      }
+    }
   }
 }
