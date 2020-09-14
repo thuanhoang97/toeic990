@@ -2,15 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select as MuiSelect, MenuItem, makeStyles } from '@material-ui/core';
 
-const Select = ({ options, value, onChange, ...props }) => {
-  const classes = useStyles();
+const Select = ({ options, value, onChange, placeholder, ...props }) => {
+  const selectClasses = useSelectStyles();
+  const menuClasses = useMenuStyles();
+
+  const handleRenderValue = (value) => {
+    if (value) {
+      const curOpt = options.find(opt => opt.value === value);
+      if (curOpt) {
+        return curOpt.name;
+      }
+    }
+    return placeholder;
+  };
 
   return (
     <MuiSelect
-      className={classes.root}
+      className={`${props.className ? props.className : ' '}`}
+      classes={selectClasses}
       variant="outlined"
-      value={value}
+      value={value || ''}
       onChange={onChange}
+      displayEmpty={value === undefined}
+      renderValue={handleRenderValue}
       MenuProps={{
         getContentAnchorEl: null,
         anchorOrigin: {
@@ -21,7 +35,7 @@ const Select = ({ options, value, onChange, ...props }) => {
           vertical: 'top',
           horizontal: 'center',
         },
-        classes: { paper: classes.menuPaper },
+        classes: menuClasses,
       }}
       {...props}
     >
@@ -34,20 +48,28 @@ const Select = ({ options, value, onChange, ...props }) => {
   );
 };
 
-const useStyles = makeStyles({
+const useSelectStyles = makeStyles({
   root: {
     width: '100%',
-    padding: 10,
+    padding: 15,
   },
-  menuPaper: {
+});
+
+const useMenuStyles = makeStyles({
+  paper: {
     maxHeight: 200,
   },
 });
+
+Select.defaultProps = {
+  placeholder: '',
+};
 
 Select.prototype = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   value: PropTypes.oneOfType[(PropTypes.number, PropTypes.string)],
   onChange: PropTypes.func,
+  placeholder: PropTypes.string.isRequired,
 };
 
 export default Select;
