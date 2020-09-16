@@ -32,18 +32,48 @@ describe('Test API', () => {
     it('It should GET no tests', async () => {
       const res = await agent.get(baseAPI);
       res.status.should.be.eql(200);
-      res.body.should.be.a('array');
-      res.body.length.should.be.eql(0);
+      res.body.tests.should.be.a('array');
+      res.body.tests.length.should.be.eql(0);
     });
 
-    it('It should GET 5 tests', async () => {
+    it('It should GET mutiple tests', async () => {
       const rawTests = createRawTests(5);
       await Test.insertMany(rawTests);
 
       const res = await agent.get(baseAPI);
       res.status.should.be.eql(200);
-      res.body.should.be.a('array');
-      res.body.length.should.be.eql(5);
+      res.body.tests.should.be.a('array');
+      res.body.tests.length.should.be.eql(5);
+    });
+
+    it('It shoud GET 10 tests(1 page)', async () => {
+      const rawTests = createRawTests(20);
+      await Test.insertMany(rawTests);
+
+      const res = await agent.get(baseAPI);
+      res.status.should.be.eql(200);
+      res.body.tests.should.be.a('array');
+      res.body.tests.length.should.eql(10);
+    });
+
+    it('It shoud GET no tests if page exceed', async () => {
+      const rawTests = createRawTests(20);
+      await Test.insertMany(rawTests);
+
+      const res = await agent.get(`${baseAPI}?page=3`);
+      res.status.should.be.eql(200);
+      res.body.tests.should.be.a('array');
+      res.body.tests.length.should.eql(0);
+    });
+
+    it('It shoud GET remain tests on last page', async () => {
+      const rawTests = createRawTests(22);
+      await Test.insertMany(rawTests);
+
+      const res = await agent.get(`${baseAPI}?page=3`);
+      res.status.should.be.eql(200);
+      res.body.tests.should.be.a('array');
+      res.body.tests.length.should.eql(2);
     });
   });
 

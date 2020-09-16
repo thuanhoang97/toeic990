@@ -1,8 +1,25 @@
 const Test = require('../../models/test.model');
 
+const TEST_EACH_PAGE = 10;
+
 exports.getTests = async (req, res) => {
-  const tests = await Test.find({}).sort('-createdAt');
-  res.json(tests);
+  let { page } = req.query;
+  page = parseInt(page) || 1;
+
+  const filter = {};
+  const totalTest = await Test.countDocuments(filter);
+  const tests = await Test
+    .find(filter)
+    .sort('-createdAt')
+    .limit(TEST_EACH_PAGE)
+    .skip((page - 1) * TEST_EACH_PAGE);
+  
+  res.json({
+    tests,
+    currentPage: page,
+    pages: Math.ceil(totalTest / TEST_EACH_PAGE),
+    numberOfResult: tests.length
+  });
 };
 
 exports.getTest = async (req, res) => {
