@@ -36,12 +36,14 @@ describe('Record API', () => {
     const { token: accountToken, account } = await createAccount('tester');
     token = accountToken;
     userId = account._id;
-    testId = (await Test.create(rawTest))._id;
+    
+    const test = await Test.create(rawTest);
+    testId = test._id;
   });
 
   beforeEach(async () => {
     await Record.deleteMany({});
-    await Test.deleteMany({});
+    // await Test.deleteMany({});
   });
 
   describe('/GET records', () => {
@@ -51,30 +53,23 @@ describe('Record API', () => {
 
       res = await agent.get(`${baseAPI}/5f50fb5485ae3f06903b8ce7`);
       res.status.should.be.eql(401);
-
-      const { _id } = await Test.create(rawTest);
-      res = await agent.post(baseAPI).send(createRawRecord(_id));
-      res.status.should.be.eql(401);
-
-      res = await agent.delete(`${baseAPI}/5f50fb5485ae3f06903b8ce7`);
-      res.status.should.be.eql(401);
     });
 
     it('It should GET no records', async () => {
       const res = await agent.get(baseAPI).set({ Authorization: token });
       res.status.should.be.eql(200);
-      res.body.should.be.a('array');
-      res.body.length.should.be.eql(0);
+      res.body.records.should.be.a('array');
+      res.body.records.length.should.be.eql(0);
     });
 
-    it('It should GET 5 records', async () => {
+    it('It should GET mutiple records', async () => {
       const rawRecords = createRawRecords(testId, userId, 5);
       await Record.insertMany(rawRecords);
 
       const res = await agent.get(baseAPI).set({ Authorization: token });
       res.status.should.be.eql(200);
-      res.body.should.be.a('array');
-      res.body.length.should.be.eql(5);
+      res.body.records.should.be.a('array');
+      res.body.records.length.should.be.eql(5);
     });
 
     it('It shoud GET your records', async () => {
@@ -86,11 +81,11 @@ describe('Record API', () => {
       await Record.insertMany(otherRawRecords);
 
       const res = await agent
-        .get(`${baseAPI}/?mine=true`)
+        .get(`${baseAPI}`)
         .set({ Authorization: token });
       res.status.should.be.eql(200);
-      res.body.should.be.a('array');
-      res.body.length.should.be.eql(2);
+      res.body.records.should.be.a('array');
+      res.body.records.length.should.be.eql(2);
     });
 
     it('It shoud GET error not found', async () => {
@@ -111,11 +106,43 @@ describe('Record API', () => {
       res.status.should.be.eql(200);
       res.body.should.be.a('object');
     });
+
+    it('It should GET 5 records(1 page)', async () => {
+      const rawRecords = createRawRecords(testId, userId, 10);
+      await Record.insertMany(rawRecords);
+
+      const res = await agent.get(baseAPI).set({ Authorization: token });
+      res.status.should.be.eql(200);
+      res.body.records.should.be.a('array');
+      res.body.records.length.should.be.eql(5);
+    });
+
+    it('It should get no records if page exceed', async () => {
+      const rawRecords = createRawRecords(testId, userId, 12);
+      await Record.insertMany(rawRecords);
+
+      const res = await agent.get(`${baseAPI}?page=4`).set({ Authorization: token });
+      res.status.should.be.eql(200);
+      res.body.records.should.be.a('array');
+      res.body.records.length.should.eql(0);
+    });
+
+    it('It should get remain records on last page', async () => {
+      const rawRecords = createRawRecords(testId, userId, 12);
+      await Record.insertMany(rawRecords);
+
+      const res = await agent.get(`${baseAPI}?page=3`).set({ Authorization: token });
+      res.status.should.be.eql(200);
+      res.body.records.should.be.a('array');
+      res.body.records.length.should.eql(2);
+    });
   });
 
   describe('/POST records', () => {
     it('Create new record', async () => {
       const rawRecord = createRawRecord(testId, userId);
+
+      // console.log('Raw records', rawRecord);
 
       const res = await agent
         .post(baseAPI)

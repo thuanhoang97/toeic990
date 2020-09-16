@@ -1,14 +1,25 @@
 const Record = require('../../models/record.model');
+const logger = require('../../logger')(__filename);
+
+const RECORD_EACH_PAGE = 5;
 
 module.exports = {
   getRecords: async (req, res) => {
-    const filter = {};
-    const { mine, test } = req.query;
-    if (mine) {
-      filter.submitBy = req.user._id;
-    }
-    
-    let records = await Record.find(filter).sort('-createAt');
+    let { test, page } = req.query;
+    page = parseInt(page) || 1;
+    logger.debug('Page: ' + page);
+    const filter = {
+      submitBy: req.user._id
+    };
+
+    const totalRecord = await Record.countDocuments(filter);
+    logger.debug(totalRecord);
+
+    let records = await Record
+      .find(filter)
+      .sort('-createAt')
+      .limit(RECORD_EACH_PAGE)
+      .skip((page - 1) * RECORD_EACH_PAGE);
 
     if (test) {
       records = await Promise.all(
@@ -16,7 +27,12 @@ module.exports = {
       );
     }
 
-    res.json(records);
+    res.json({
+      records,
+      currentPage: page,
+      pages: Math.ceil(totalRecord / RECORD_EACH_PAGE),
+      numOfResult: records.length,
+    });
   },
 
   getRecord: async (req, res) => {
