@@ -4,6 +4,9 @@ const winston = require('winston');
 const { combine, timestamp, label, printf, colorize } = winston.format;
 
 const consoleFormat = printf(({ level, message, label, timestamp }) => {
+  if (typeof message === 'object') {
+    message = JSON.stringify(message);
+  }
   return `[${label}][${timestamp}] ${level}: ${message}`;
 });
 
