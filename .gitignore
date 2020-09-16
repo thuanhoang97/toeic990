@@ -26,3 +26,5 @@ client/yarn-error.log*
 server/node_modules
 server/.vscode
 server/.env
+server/yarn.lock
+server/yarn-error.log
