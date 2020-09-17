@@ -59,6 +59,7 @@ const UserAnswerSheet = ({
 
   const onConfirmSubmit = () => {
     setPaused(true);
+    setConfirmOnQuit(false);
     onCreateRecord();
   };
 

@@ -7,13 +7,11 @@ module.exports = {
   getRecords: async (req, res) => {
     let { test, page } = req.query;
     page = parseInt(page) || 1;
-    logger.debug('Page: ' + page);
     const filter = {
       submitBy: req.user._id
     };
 
     const totalRecord = await Record.countDocuments(filter);
-    logger.debug(totalRecord);
 
     let records = await Record
       .find(filter)

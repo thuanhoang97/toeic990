@@ -2,10 +2,11 @@ require('dotenv').config({ path: '.dev.env' });
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
-const db = require('./db');
-const Test = require('./models/test.model');
+const db = require('../db');
+const Test = require('../models/test.model');
+const logger = require('../logger')(__filename);
 
-const test_folder = 'C:/Users/hoang/Desktop/tests';
+const TEST_FOLDER = path.resolve(__dirname, 'tests');
 
 const ANSWER_MAP = {
   A: 0,
@@ -39,7 +40,7 @@ const loadAnswersFromFiles = (folderPath) => {
 };
 
 db.connect(process.env.DB_URI)
-  .then(() => loadAnswersFromFiles(test_folder))
+  .then(() => loadAnswersFromFiles(TEST_FOLDER))
   .then((tests) => {
     const promises = tests.map((test) => {
       return Test.create(test)
@@ -58,4 +59,7 @@ db.connect(process.env.DB_URI)
 
     return Promise.all(promises);
   })
-  .then(() => mongoose.disconnect());
+  .then(() => mongoose.disconnect())
+  .catch((err) => {
+    logger.error(err.message);
+  });

@@ -19,13 +19,14 @@ const AnimateList = ({
     loadItems().then(() => setLoading(false));
   }, [loadItems]);
 
-  // const transitions = useTransition(items, (item) => item._id, {
-  //   from: { transform: 'translate3d(-200px, 0, 0)', opacity: 0 },
-  //   enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
-  //   config: { duration: 1000, easing: easings.easeBackInOut },
-  //   trail: 100,
-  //   reset: true,
-  // });
+  const transitions = useTransition(items, (item) => item._id, {
+    from: { transform: 'translate3d(-100px, 0, 0)', opacity: 0 },
+    enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
+    leave: { opacity: 0 },
+    config: { duration: 1200, easing: easings.easeBackInOut },
+    trail: 100,
+    reset: true,
+  });
 
   if (isLoading) return <CircularProgress />;
   if (!items.length) return <p className="info">{noItemMessage}</p>;
@@ -41,7 +42,6 @@ const AnimateList = ({
           <ItemComponent data={item} />
         </li>
       ))}
-
       {/* {transitions.map(({ item, props, key }) => (
         <animated.li
           key={key}

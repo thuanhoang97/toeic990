@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "mocha --exit",
+    "load-tests": "node scripts/load_tests.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {

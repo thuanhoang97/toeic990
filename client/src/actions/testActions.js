@@ -1,15 +1,28 @@
+import { config } from 'react-spring';
 import { GET_TESTS } from '../actionTypes/testTypes';
 import { TestAPI } from '../api';
 
-export const loadTests = (onLoaded) => dispatch => {
-  return TestAPI.list().then(tests => {
-    dispatch(getTests(tests));
-    onLoaded && onLoaded(tests);
-  })
-    .catch(err => console.log('Load Tests error:', err));
+export const loadTests = (page) => (dispatch) => {
+  console.log('Reload');
+  return TestAPI.list({ page })
+    .then((data) => {
+      const { tests, currentPage, pages } = data;
+      dispatch(
+        getTests({
+          tests,
+          pages,
+          currentPage,
+        })
+      );
+    })
+    .catch((err) => console.log('Load Tests error:', err));
 };
 
-export const getTests = (tests) => ({
+export const getTests = ({ tests, currentPage, pages }) => ({
   type: GET_TESTS,
-  payload: { tests }
+  payload: {
+    tests,
+    currentPage,
+    pages,
+  },
 });

@@ -26,7 +26,7 @@ const RecordContainer = ({ tests, records, loadRecords, history }) => {
 
   return <div className="record-container">
     <h2 className="title">Your records</h2>
-    <RecordFilter tests={tests} onApplyFilter={handleApplyFilter}/>
+    {/* <RecordFilter tests={tests} onApplyFilter={handleApplyFilter}/> */}
     <AnimateList
       items={displayRecords}
       loadItems={loadRecords}

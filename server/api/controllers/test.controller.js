@@ -1,6 +1,6 @@
 const Test = require('../../models/test.model');
 
-const TEST_EACH_PAGE = 10;
+const TEST_EACH_PAGE = 5;
 
 exports.getTests = async (req, res) => {
   let { page } = req.query;
@@ -10,10 +10,10 @@ exports.getTests = async (req, res) => {
   const totalTest = await Test.countDocuments(filter);
   const tests = await Test
     .find(filter)
-    .sort('-createdAt')
+    .sort('name')
     .limit(TEST_EACH_PAGE)
     .skip((page - 1) * TEST_EACH_PAGE);
-  
+
   res.json({
     tests,
     currentPage: page,
