@@ -12,3 +12,7 @@ export const list = (query) => {
 export const get = (id, query) => {
   return axios.get(withQuery(`/records/${id}`, query)).then((res) => res.data);
 };
+
+export const remove = (id) => {
+  return axios.delete(`records/${id}`).then((res) => res.data);
+}

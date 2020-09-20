@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import './record.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { loadRecords } from '../../actions/recordActions';
+import { loadRecords, removeRecord } from '../../actions/recordActions';
+import { showNotify } from '../../actions/modalActions';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
-import queryString from 'query-string';
-import AnimateList from '../common/List';
+import List from '../common/List';
 import RecordListItem from './RecordListItem';
 import { getURLWithPage } from '../../utils';
 
@@ -16,12 +16,29 @@ const RecordContainer = ({
   page,
   records,
   loadRecords,
+  showNotify,
+  removeRecord,
   history,
   location,
 }) => {
   const redirectCheckSheetURL = (record) => {
     history.push(`/check/${record._id}`);
   };
+
+  const onRemoveRecord = (recordId) => {
+    showNotify({
+      message: 'Are you sure to remove this record?',
+      onSuccess: () => {
+        removeRecord(recordId).then(() => {
+          loadRecords(page);
+        });
+      },
+    });
+  };
+
+  const loadItems = useCallback(() => {
+    return loadRecords(page);
+  }, [loadRecords, page]);
 
   const renderPagination = () => (
     <Pagination
@@ -45,11 +62,14 @@ const RecordContainer = ({
     <div className="record-container">
       <h2 className="title">Your records</h2>
       {totalPage > 1 && renderPagination()}
-      <AnimateList
+      <List
         items={records}
-        loadItems={loadRecords}
+        loadItems={loadItems}
         itemComponent={RecordListItem}
         onClickItem={redirectCheckSheetURL}
+        itemProps={{
+          onRemove: onRemoveRecord,
+        }}
       />
     </div>
   );
@@ -60,6 +80,8 @@ RecordContainer.propTypes = {
   page: PropTypes.number.isRequired,
   totalPage: PropTypes.number.isRequired,
   loadRecords: PropTypes.func.isRequired,
+  showNotify: PropTypes.func.isRequired,
+  removeRecord: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ records }) => {
@@ -71,12 +93,8 @@ const mapStateToProps = ({ records }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { location }) => {
-  let { page } = queryString.parse(location.search);
-  page = parseInt(page) || 1;
-  return {
-    loadRecords: () => dispatch(loadRecords(page)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RecordContainer);
+export default connect(mapStateToProps, {
+  loadRecords,
+  removeRecord,
+  showNotify,
+})(RecordContainer);

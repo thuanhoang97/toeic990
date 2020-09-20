@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { loadTests } from '../../actions/testActions';
 import { showInputTestMode } from '../../actions/modalActions';
 import { generateUrl, getURLWithPage } from '../../utils';
-import AnimateList from '../common/List';
+import List from '../common/List';
 import TestListItem from './TestListItem';
 
 const TestContainer = ({
@@ -54,7 +54,7 @@ const TestContainer = ({
     <div className="test-container">
       <h2 className="title">List tests</h2>
       {totalPage > 1 && renderPagination()}
-      <AnimateList
+      <List
         className="tests"
         items={tests}
         loadItems={loadTests}
@@ -73,7 +73,7 @@ TestContainer.propTypes = {
   showInputTestMode: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ tests }, { location }) => {
+const mapStateToProps = ({ tests }) => {
   const { currentPage, totalPage, items } = tests;
 
   return {

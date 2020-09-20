@@ -8,6 +8,10 @@ export const createRecord = (record) => () => {
   return RecordAPI.create({ ...record });
 };
 
+export const removeRecord = (recordId) => (dispatch) => {
+  return RecordAPI.remove(recordId);
+}
+
 export const loadRecord = (recordId, options) => (dispatch) => {
   return RecordAPI.get(recordId, options)
     .then((record) => {

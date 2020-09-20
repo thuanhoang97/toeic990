@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './List.scss';
-import { useTransition, animated } from 'react-spring';
-import * as easings from 'd3-ease';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const AnimateList = ({
   items,
+  itemProps,
   loadItems,
   itemComponent: ItemComponent,
   onClickItem,
@@ -31,7 +30,7 @@ const AnimateList = ({
           key={item._id}
           onClick={() => onClickItem && onClickItem(item)}
         >
-          <ItemComponent data={item} />
+          <ItemComponent data={item} {...itemProps} />
         </li>
       ))}
     </ul>
@@ -44,6 +43,7 @@ AnimateList.defaultProps = {
 
 AnimateList.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  itemProps: PropTypes.object,
   loadItems: PropTypes.func.isRequired,
   itemComponent: PropTypes.elementType,
   onClickItem: PropTypes.func,

@@ -14,6 +14,19 @@
     padding: 10px 10px 32px;
     font-size: 1rem;
 
+    .btnRemove {
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: #df5353;
+      transition: color .3s ease-out;
+
+      &:hover {
+        color: #c22424;
+        background-color: transparent;
+      }
+    }
+
     &__title {
       display: flex;
       align-items: center;
