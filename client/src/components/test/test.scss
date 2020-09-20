@@ -20,8 +20,9 @@
     padding: 15px;
   }
 
-  .tests {
-    height: 400px;
+  .MuiPagination-root {
+    align-self: flex-end;
+    margin-bottom: 20px;
   }
 }
 

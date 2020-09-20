@@ -36,7 +36,6 @@ function App({ auth, showNotify }) {
             <PrivateRoute
               exact
               path="/testing/:testId"
-              onLeave={() => console.log('Leaves???')}
               component={UserAnswerSheet}
             />
             <PrivateRoute

@@ -22,7 +22,7 @@ const RecordListItem = ({ data }) => {
           Time taken: <span className="highlight">{timeUse}</span>
         </div>
         <div className="record__date">
-          Date test: <span className="highlight">{createAt}</span>
+          <span className="highlight">{createAt}</span>
         </div>
       </div>
     </div>

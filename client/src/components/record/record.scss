@@ -11,7 +11,7 @@
 
   .record {
     position: relative;
-    padding: 10px;
+    padding: 10px 10px 32px;
     font-size: 1rem;
 
     &__title {
@@ -26,6 +26,11 @@
         font-style: italic;
         font-size: 1.1rem;
       }
+    }
+
+    &__date {
+      position: absolute;
+      right: 10px;
     }
 
     &__test-name {
@@ -46,6 +51,11 @@
     &__time {
       margin-right: 80px;
     }
+  }
+
+  .MuiPagination-root {
+    align-self: flex-end;
+    margin-bottom: 20px;
   }
 }
 

@@ -8,6 +8,7 @@ const Record = require('../models/record.model');
 const User = require('../models/user.model');
 const app = require('../server');
 const db = require('../db');
+const { RECORD_EACH_PAGE } = require('../constants');
 
 let agent = null;
 let server = null
@@ -43,7 +44,6 @@ describe('Record API', () => {
 
   beforeEach(async () => {
     await Record.deleteMany({});
-    // await Test.deleteMany({});
   });
 
   describe('/GET records', () => {
@@ -107,42 +107,45 @@ describe('Record API', () => {
       res.body.should.be.a('object');
     });
 
-    it('It should GET 5 records(1 page)', async () => {
-      const rawRecords = createRawRecords(testId, userId, 10);
+    it(`It should GET ${RECORD_EACH_PAGE} records(1page)`, async () => {
+      const rawRecords = createRawRecords(testId, userId, RECORD_EACH_PAGE + 2);
       await Record.insertMany(rawRecords);
 
       const res = await agent.get(baseAPI).set({ Authorization: token });
       res.status.should.be.eql(200);
       res.body.records.should.be.a('array');
-      res.body.records.length.should.be.eql(5);
+      res.body.records.length.should.be.eql(RECORD_EACH_PAGE);
     });
 
     it('It should get no records if page exceed', async () => {
-      const rawRecords = createRawRecords(testId, userId, 12);
+      const numRecord = RECORD_EACH_PAGE + 2;
+      const rawRecords = createRawRecords(testId, userId, numRecord);
       await Record.insertMany(rawRecords);
 
-      const res = await agent.get(`${baseAPI}?page=4`).set({ Authorization: token });
+      const page = Math.ceil(numRecord / RECORD_EACH_PAGE) + 1;
+      const res = await agent.get(`${baseAPI}?page=${page}`).set({ Authorization: token });
       res.status.should.be.eql(200);
       res.body.records.should.be.a('array');
       res.body.records.length.should.eql(0);
     });
 
     it('It should get remain records on last page', async () => {
-      const rawRecords = createRawRecords(testId, userId, 12);
+      const oddRecord = 2;
+      const numRecord = RECORD_EACH_PAGE +  oddRecord;
+      const rawRecords = createRawRecords(testId, userId, numRecord);
       await Record.insertMany(rawRecords);
 
-      const res = await agent.get(`${baseAPI}?page=3`).set({ Authorization: token });
+      const page = Math.ceil(numRecord / RECORD_EACH_PAGE);
+      const res = await agent.get(`${baseAPI}?page=${page}`).set({ Authorization: token });
       res.status.should.be.eql(200);
       res.body.records.should.be.a('array');
-      res.body.records.length.should.eql(2);
+      res.body.records.length.should.eql(oddRecord);
     });
   });
 
   describe('/POST records', () => {
     it('Create new record', async () => {
       const rawRecord = createRawRecord(testId, userId);
-
-      // console.log('Raw records', rawRecord);
 
       const res = await agent
         .post(baseAPI)

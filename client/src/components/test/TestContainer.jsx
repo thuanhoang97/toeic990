@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loadTests } from '../../actions/testActions';
 import { showInputTestMode } from '../../actions/modalActions';
-import { generateUrl } from '../../utils';
-import AnimateList from '../common/AnimateList';
+import { generateUrl, getURLWithPage } from '../../utils';
+import AnimateList from '../common/List';
 import TestListItem from './TestListItem';
 
 const TestContainer = ({
@@ -32,18 +32,28 @@ const TestContainer = ({
     });
   };
 
-  const getURLWithPage = (page) =>
-    queryString.stringifyUrl({
-      url: location.pathname,
-      query: {
-        ...queryString.parse(location.search),
-        page: page === 1 ? undefined : page,
-      },
-    });
+  const renderPagination = () => (
+    <Pagination
+      page={page}
+      count={totalPage}
+      variant="outlined"
+      hideNextButton
+      hidePrevButton
+      shape="rounded"
+      renderItem={(item) => (
+        <PaginationItem
+          component={Link}
+          to={getURLWithPage(location.pathname, location.search, item.page)}
+          {...item}
+        />
+      )}
+    />
+  );
 
   return (
     <div className="test-container">
       <h2 className="title">List tests</h2>
+      {totalPage > 1 && renderPagination()}
       <AnimateList
         className="tests"
         items={tests}
@@ -51,29 +61,8 @@ const TestContainer = ({
         itemComponent={TestListItem}
         onClickItem={doTest}
       />
-      {totalPage > 0 && (
-        <Pagination
-          page={page}
-          count={totalPage}
-          variant="outlined"
-          shape="rounded"
-          renderItem={(item) => (
-            <PaginationItem
-              component={Link}
-              to={getURLWithPage(item.page)}
-              {...item}
-            />
-          )}
-        />
-      )}
     </div>
   );
-};
-
-TestContainer.defaultProps = {
-  page: 1,
-  totalPage: 1,
-  tests: [],
 };
 
 TestContainer.propTypes = {
@@ -85,7 +74,6 @@ TestContainer.propTypes = {
 };
 
 const mapStateToProps = ({ tests }, { location }) => {
-
   const { currentPage, totalPage, items } = tests;
 
   return {

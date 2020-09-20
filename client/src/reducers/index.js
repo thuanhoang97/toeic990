@@ -12,9 +12,8 @@ const rootReducer = combineReducers({
   tests: pagination(tests),
   auth,
   errors,
-  records,
+  records: pagination(records),
   loadingActions,
-  pagination,
 });
 
 export default rootReducer;

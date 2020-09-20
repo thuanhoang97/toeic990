@@ -1,13 +1,23 @@
+
+const initialState = {
+  items: [],
+  currentPage: 1,
+  totalPage: 1,
+};
+
 export default function (listReducer) {
-  return (state, action) => {
-    let items = listReducer(state, action);
-    if (action.payload && action.payload.pages) {
-      return {
-        items,
-        currentPage: action.payload.currentPage,
-        totalPage: action.payload.pages,
-      };
+  return (state=initialState, action) => {
+    let items = listReducer(state.items, action);
+    let newState = {...state, items };
+    if (action.payload) {
+      const { currentPage, pages } = action.payload;
+      if (currentPage) {
+        newState.currentPage = currentPage;
+      }
+      if (pages) {
+        newState.totalPage = pages;
+      }
     }
-    return items;
+    return newState;
   };
 }

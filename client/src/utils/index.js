@@ -74,3 +74,13 @@ export const getPartNameByRange = (range) => {
   }
   return '';
 };
+
+export const getURLWithPage = (pathname, searchParams, page) => {
+  return queryString.stringifyUrl({
+    url: pathname,
+    query: {
+      ...queryString.parse(searchParams),
+      page: page === 1 ? undefined : page,
+    }
+  })
+};

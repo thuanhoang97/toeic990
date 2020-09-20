@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const logger = require('./logger')(__filename);
 
 const connect = (dbURI) => {
   const options = {
@@ -7,17 +8,17 @@ const connect = (dbURI) => {
     useCreateIndex: true,
     useFindAndModify: false,
   };
-  // console.log('Connecting to db...');
+  logger.info('Connecting to db...');
   return mongoose
     .connect(dbURI, options)
     .then((connection) => {
-      // console.log('Connected!!!');
+      logger.info('Connected!!!');
       return connection;
     })
     .catch((err) => {
-      console.log('Connect DB got error!');
-      console.log('URI: ' + dbURI);
-      console.log(err);
+      logger.error('Connect DB got error!')
+      logger.error('URI: ' + dbURI);
+      logger.error(err);
     });
 };
 

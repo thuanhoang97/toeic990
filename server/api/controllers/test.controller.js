@@ -1,6 +1,5 @@
 const Test = require('../../models/test.model');
-
-const TEST_EACH_PAGE = 5;
+const { TEST_EACH_PAGE } = require('../../constants');
 
 exports.getTests = async (req, res) => {
   let { page } = req.query;

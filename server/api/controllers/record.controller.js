@@ -1,7 +1,5 @@
 const Record = require('../../models/record.model');
-const logger = require('../../logger')(__filename);
-
-const RECORD_EACH_PAGE = 5;
+const { RECORD_EACH_PAGE } = require('../../constants');
 
 module.exports = {
   getRecords: async (req, res) => {

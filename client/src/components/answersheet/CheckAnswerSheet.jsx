@@ -16,8 +16,6 @@ const CheckAnswerSheet = ({ record, loadRecord }) => {
 
   if (!record) return <Loading />;
 
-  console.log(record);
-
   return (
     <div className="sheet-container">
       <div className="wrapper">
@@ -47,9 +45,10 @@ CheckAnswerSheet.propTypes = {
 };
 
 const mapStateToProps = ({ records }, { match }) => {
+  const { items } = records;
   const recordId = match.params.recordId;
   return {
-    record: records.find((r) => r._id === recordId),
+    record: items.find((r) => r._id === recordId),
   };
 };
 

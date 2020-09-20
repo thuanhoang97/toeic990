@@ -6,6 +6,7 @@ const request = require('supertest');
 const Test = require('../models/test.model');
 const app = require('../server');
 const db = require('../db');
+const { TEST_EACH_PAGE } = require('../constants');
 
 let agent = null;
 let server = null
@@ -46,34 +47,40 @@ describe('Test API', () => {
       res.body.tests.length.should.be.eql(5);
     });
 
-    it('It shoud GET 10 tests(1 page)', async () => {
-      const rawTests = createRawTests(20);
+    it(`It should GET ${TEST_EACH_PAGE} tests(1 page)`, async () => {
+      const numTest = TEST_EACH_PAGE + 2;
+      const rawTests = createRawTests(numTest);
       await Test.insertMany(rawTests);
 
       const res = await agent.get(baseAPI);
       res.status.should.be.eql(200);
       res.body.tests.should.be.a('array');
-      res.body.tests.length.should.eql(10);
+      res.body.tests.length.should.eql(TEST_EACH_PAGE);
     });
 
     it('It shoud GET no tests if page exceed', async () => {
-      const rawTests = createRawTests(20);
+      const numTest = TEST_EACH_PAGE + 2;
+      const rawTests = createRawTests(numTest);
       await Test.insertMany(rawTests);
 
-      const res = await agent.get(`${baseAPI}?page=3`);
+      const page = Math.ceil(numTest / TEST_EACH_PAGE) + 1;
+      const res = await agent.get(`${baseAPI}?page=${page}`);
       res.status.should.be.eql(200);
       res.body.tests.should.be.a('array');
       res.body.tests.length.should.eql(0);
     });
 
     it('It shoud GET remain tests on last page', async () => {
-      const rawTests = createRawTests(22);
+      const oddTest =  2;
+      const numTest = TEST_EACH_PAGE + oddTest;
+      const rawTests = createRawTests(numTest);
       await Test.insertMany(rawTests);
 
-      const res = await agent.get(`${baseAPI}?page=3`);
+      const lastPage = Math.ceil(numTest / TEST_EACH_PAGE);
+      const res = await agent.get(`${baseAPI}?page=${lastPage}`);
       res.status.should.be.eql(200);
       res.body.tests.should.be.a('array');
-      res.body.tests.length.should.eql(2);
+      res.body.tests.length.should.eql(oddTest);
     });
   });
 

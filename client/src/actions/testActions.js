@@ -1,9 +1,7 @@
-import { config } from 'react-spring';
 import { GET_TESTS } from '../actionTypes/testTypes';
 import { TestAPI } from '../api';
 
 export const loadTests = (page) => (dispatch) => {
-  console.log('Reload');
   return TestAPI.list({ page })
     .then((data) => {
       const { tests, currentPage, pages } = data;

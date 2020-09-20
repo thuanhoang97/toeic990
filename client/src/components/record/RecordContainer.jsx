@@ -1,55 +1,82 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './record.scss';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loadRecords } from '../../actions/recordActions';
-import AnimateList from '../common/AnimateList';
+import Pagination from '@material-ui/lab/Pagination';
+import PaginationItem from '@material-ui/lab/PaginationItem';
+import queryString from 'query-string';
+import AnimateList from '../common/List';
 import RecordListItem from './RecordListItem';
-import RecordFilter from './RecordFilter';
+import { getURLWithPage } from '../../utils';
 
-const RecordContainer = ({ tests, records, loadRecords, history }) => {
-  const [displayRecords, setDisplayRecords] = useState(records);
-
-  useEffect(() => {
-    setDisplayRecords(records);
-  }, [records]);
-
-  const showCheckSheet = (record) => {
+const RecordContainer = ({
+  totalPage,
+  page,
+  records,
+  loadRecords,
+  history,
+  location,
+}) => {
+  const redirectCheckSheetURL = (record) => {
     history.push(`/check/${record._id}`);
-  }; 
+  };
 
-  const handleApplyFilter = useCallback((filter) => {
-    if (filter.testId) {
-      setDisplayRecords(records.filter(r => r.test._id === filter.testId));
-    }
-  }, [records]);
-
-  return <div className="record-container">
-    <h2 className="title">Your records</h2>
-    {/* <RecordFilter tests={tests} onApplyFilter={handleApplyFilter}/> */}
-    <AnimateList
-      items={displayRecords}
-      loadItems={loadRecords}
-      itemComponent={RecordListItem}
-      onClickItem={showCheckSheet}
+  const renderPagination = () => (
+    <Pagination
+      page={page}
+      count={totalPage}
+      hidePrevButton
+      hideNextButton
+      shape="rounded"
+      variant="outlined"
+      renderItem={(item) => (
+        <PaginationItem
+          component={Link}
+          to={getURLWithPage(location.pathname, location.search, item.page)}
+          {...item}
+        />
+      )}
     />
-  </div>;
+  );
+
+  return (
+    <div className="record-container">
+      <h2 className="title">Your records</h2>
+      {totalPage > 1 && renderPagination()}
+      <AnimateList
+        items={records}
+        loadItems={loadRecords}
+        itemComponent={RecordListItem}
+        onClickItem={redirectCheckSheetURL}
+      />
+    </div>
+  );
 };
 
 RecordContainer.propTypes = {
-  tests: PropTypes.arrayOf(PropTypes.object).isRequired,
   records: PropTypes.arrayOf(PropTypes.object).isRequired,
+  page: PropTypes.number.isRequired,
+  totalPage: PropTypes.number.isRequired,
   loadRecords: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ records }) => {
-  const testsById = {};
-  records.forEach(r => testsById[r.test._id] = r.test);
-
+  const { items, currentPage, totalPage } = records;
   return {
-    records,
-    tests: Object.keys(testsById).map(testId => testsById[testId]),
-  }
+    records: items,
+    page: currentPage,
+    totalPage,
+  };
 };
 
-export default connect(mapStateToProps, { loadRecords })(RecordContainer);
+const mapDispatchToProps = (dispatch, { location }) => {
+  let { page } = queryString.parse(location.search);
+  page = parseInt(page) || 1;
+  return {
+    loadRecords: () => dispatch(loadRecords(page)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecordContainer);

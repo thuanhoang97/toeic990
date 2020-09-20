@@ -19,7 +19,7 @@ winston.addColors({
 
 module.exports = function (callerFile) {
   return winston.createLogger({
-    level: 'debug',
+    level: process.env.NODE_ENV === 'test' ? 'error' : 'debug',
     transports: [
       new winston.transports.Console({
         format: combine(
