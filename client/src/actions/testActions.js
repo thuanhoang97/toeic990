@@ -1,4 +1,4 @@
-import { GET_TESTS } from '../actionTypes/testTypes';
+import { GET_TESTS, GET_TEST } from '../actionTypes/testTypes';
 import { TestAPI } from '../api';
 
 export const loadTests = (page) => (dispatch) => {
@@ -16,6 +16,15 @@ export const loadTests = (page) => (dispatch) => {
     .catch((err) => console.log('Load Tests error:', err));
 };
 
+export const loadTest = (id) => (dispatch) => {
+
+  return TestAPI.getById(id)
+    .then((test) => {
+      dispatch(getTest(test))
+    })
+    .catch((err) => console.log('Load test error:', err));
+};
+
 export const getTests = ({ tests, currentPage, pages }) => ({
   type: GET_TESTS,
   payload: {
@@ -23,4 +32,11 @@ export const getTests = ({ tests, currentPage, pages }) => ({
     currentPage,
     pages,
   },
+});
+
+export const getTest = (test) => ({
+  type: GET_TEST,
+  payload: {
+    test
+  }
 });
