@@ -12,6 +12,7 @@ import { generateUrl, getURLWithPage } from '../../utils';
 import List from '../common/List';
 import TestListItem from './TestListItem';
 
+
 const TestContainer = ({
   totalPage,
   page,
@@ -73,11 +74,12 @@ TestContainer.propTypes = {
   showInputTestMode: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ tests }) => {
-  const { currentPage, totalPage, items } = tests;
+const mapStateToProps = ({ tests }, { location }) => {
+  const { totalPage, items } = tests;
+  const { page } = queryString.parse(location.search);
 
   return {
-    page: currentPage,
+    page: Number(page),
     totalPage: totalPage,
     tests: items,
   };

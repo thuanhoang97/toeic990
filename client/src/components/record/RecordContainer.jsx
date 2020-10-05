@@ -10,6 +10,7 @@ import PaginationItem from '@material-ui/lab/PaginationItem';
 import List from '../common/List';
 import RecordListItem from './RecordListItem';
 import { getURLWithPage } from '../../utils';
+import queryString from 'query-string';
 
 const RecordContainer = ({
   totalPage,
@@ -37,6 +38,7 @@ const RecordContainer = ({
   };
 
   const loadItems = useCallback(() => {
+    console.log('page', page);
     return loadRecords(page);
   }, [loadRecords, page]);
 
@@ -84,11 +86,12 @@ RecordContainer.propTypes = {
   removeRecord: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ records }) => {
-  const { items, currentPage, totalPage } = records;
+const mapStateToProps = ({ records }, { location }) => {
+  const { items, totalPage } = records;
+  const { page } = queryString.parse(location.search);
   return {
     records: items,
-    page: currentPage,
+    page: Number(page),
     totalPage,
   };
 };
